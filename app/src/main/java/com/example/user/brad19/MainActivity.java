@@ -1,6 +1,8 @@
 package com.example.user.brad19;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +29,20 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK){
             Uri uri = data.getData();
-            Log.v("brad", uri.getPath());
+            Log.v("brad", getRealPathFromURI(uri));
         }
     }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        ContentResolver re = getContentResolver();
+        String[] proj = { MediaStore.Audio.Media.DATA };
+        Cursor cursor = re.query(contentUri, proj, null,
+                null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
 }
