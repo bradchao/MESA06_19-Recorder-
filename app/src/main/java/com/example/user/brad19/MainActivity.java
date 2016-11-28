@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,9 +17,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mp;
     private String strPlayMusic;
+    private MediaRecorder mr;
+    private File sdroot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
                             Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     123);
         }
+        sdroot = Environment.getExternalStorageDirectory();
 
     }
 
@@ -48,6 +55,40 @@ public class MainActivity extends AppCompatActivity {
         try {
             mp = new MediaPlayer();
             mp.setDataSource(strPlayMusic);
+            mp.prepare();
+            mp.start();
+        }catch(Exception e){
+            Log.v("brad", e.toString());
+        }
+    }
+
+    public void b3(View v){
+        mr = new MediaRecorder();
+        mr.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mr.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+        mr.setOutputFile(sdroot.getAbsolutePath() + "/brad.3gp");
+
+        try {
+            mr.prepare();
+            mr.start();
+        }catch (Exception ee){
+            Log.v("brad", ee.toString());
+        }
+    }
+
+    public void b4(View v){
+        if (mr!=null){
+            mr.stop();
+            mr.release();
+            mr = null;
+        }
+    }
+
+    public void b5(View v){
+        try {
+            mp = new MediaPlayer();
+            mp.setDataSource(sdroot.getAbsolutePath() + "/brad.3gp");
             mp.prepare();
             mp.start();
         }catch(Exception e){
