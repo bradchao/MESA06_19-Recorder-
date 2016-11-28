@@ -20,6 +20,11 @@
         android:layout_height="wrap_content"
         android:onClick="b3"
         android:text="B3" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="b4"
+        android:text="B4" />
 
     <TextView
         android:id="@+id/mesg"
